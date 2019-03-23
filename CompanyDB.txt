@@ -1,0 +1,109 @@
+--Customer
+
+CREATE TABLE Customer_T2 (
+CustomerID INT NOT NULL,
+CustomerName VARCHAR(25) NOT NULL,
+CustomerAddress VARCHAR(30),
+CustomerCity VARCHAR(20),
+CustomerState CHAR(2),
+CustomerPostalCode VARCHAR(9),
+CustomerType VARCHAR(20) DEFAULT 'Commercial',
+CONSTRAINT Customer_PK PRIMARY KEY (CustomerID));
+
+INSERT INTO Customer_T2 values (001, 'Broken Arrow Furniture', '890 Blake Drive', 'Berea', 'OH', 44107, '')
+INSERT INTO Customer_T2 values (002, 'Jim Bow Furniture', '31 Tesser Drive', 'Berea', 'OH', 44107, '')
+INSERT INTO Customer_T2 values (003, 'Sit Here Furniture', '777 Almond Ave', 'Berea', 'OH', 44107, '')
+
+SELECT * FROM Customer_T2;
+
+SELECT * FROM Customer_T2
+WHERE CustomerID < 002;
+
+--Order
+
+CREATE TABLE Order_T2 (
+OrderID INT NOT NULL,
+OrderDate DATE,
+CustomerID INT,
+CONSTRAINT Order_PK PRIMARY KEY (OrderID),
+CONSTRAINT Order_FK FOREIGN KEY (CustomerID) 
+REFERENCES Customer_T2(CustomerID));
+
+INSERT INTO Order_T2 values (061, '2018-09-10', 001)
+INSERT INTO Order_T2 values (072, '2018-11-12', 002)
+INSERT INTO Order_T2 values (098, '2018-08-22', 003)
+
+SELECT * FROM Order_T2;
+
+--Product
+
+CREATE TABLE Product_T2 (
+ProductID INT NOT NULL,
+ProductDescription VARCHAR(50),
+ProductFinish VARCHAR(20)
+CHECK (ProductFinish IN (
+'Cherry', 'Natural Ash', 'White Ash', 'Red Oak', 'Natural Oak', 'Walnut')),
+ProductStandardPrice DECIMAL(6,2),
+ProductLineID INTEGER,
+CONSTRAINT Product_PK PRIMARY KEY (ProductID));
+
+INSERT INTO Product_T2 values (221, 'Chair', 'Red Oak', 299, 876)
+INSERT INTO Product_T2 values (275, 'Bed', 'Natural Oak', 699, 898)
+INSERT INTO Product_T2 values (209, 'Table', 'Walnut', 599, 811)
+
+SELECT * FROM Product_T2;
+
+--OrderLine
+
+CREATE TABLE OrderLine_T2 (
+OrderID INT NOT NULL,
+ProductID INTEGER NOT NULL,
+OrderedQuantity INT,
+CONSTRAINT OrderLine_PK PRIMARY KEY (OrderID, ProductID),
+CONSTRAINT OrderLine_FK1 FOREIGN KEY (OrderID) REFERENCES Order_T2(OrderID),
+CONSTRAINT OrderLine_FK2 FOREIGN KEY (ProductID) REFERENCES Product_T2(ProductID));
+
+INSERT INTO OrderLine_T2 values (061, 221, 32)
+INSERT INTO OrderLine_T2 values (072, 275, 45)
+INSERT INTO OrderLine_T2 values (098, 209, 25)
+
+SELECT * FROM OrderLine_T2;
+
+CREATE TABLE Student (
+StudentID INT NOT NULL,
+GraduationDate DATE NOT NULL
+CONSTRAINT Student_PK PRIMARY KEY (StudentID)
+);
+
+CREATE TABLE Enrollment (
+ClassIDEN INT NOT NULL,
+StudentID INT NOT NULL,
+EnrolledDate DATE NOT NULL,
+Grade VARCHAR(50) NOT NULL,
+CONSTRAINT Enrollment_PK PRIMARY KEY (ClassIDEN));
+
+CREATE TABLE Classes (
+ClassIDCL INT NOT NULL,
+CourseID VARCHAR(50) NOT NULL,
+InstructorID INT NOT NULL,
+RoomID VARCHAR(20) NOT NULL,
+DayOfWeek VARCHAR(20) NOT NULL,
+StartTime DATETIME NOT NULL,
+CONSTRAINT ClassID_PK PRIMARY KEY (ClassIDCL));
+
+CREATE TABLE Course (
+CourseID VARCHAR(50) NOT NULL,
+CourseDesc VARCHAR(100) NOT NULL,
+CONSTRAINT CourseID_PK PRIMARY KEY (CourseID));
+
+CREATE TABLE Instructor (
+InstructorID VARCHAR(50) NOT NULL Primary Key,
+DeptID VARCHAR(10) NOT NULL,
+HireDate DATE);
+
+CREATE TABLE Room (
+RoomID VARCHAR(10) NOT NULL Primary Key,
+RoomDesc VARCHAR(100) NOT NULL);
+
+
+
